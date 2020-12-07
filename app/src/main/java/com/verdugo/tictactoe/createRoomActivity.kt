@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -39,26 +40,26 @@ class createRoomActivity : AppCompatActivity() {
         })
 
         buttonInvitar.setOnClickListener {
-            generateDynamicLink()
+            generateDynamicLink(idRoom)
         }
 
     }
 
-     fun generateDynamicLink() {
+     fun generateDynamicLink(idRoom: String) {
         Firebase.dynamicLinks.shortLinkAsync {
-            link = Uri.parse("https://verdugo.page.link/mVFa")
+            link = Uri.parse("https://verdugo.page.link/mVFa?code=$idRoom")
             domainUriPrefix = "https://verdugo.page.link"
             // Set parameters
             androidParameters("com.verdugo.tictactoe") {
                 minimumVersion = 125
             }
             socialMetaTagParameters {
-                title = "Tic Tac Toe Online"
+                title = "Tic Tac Toe Código:$idRoom"
                 description = "¡Ven y juega conmigo!"
+                imageUrl = Uri.parse("https://miro.medium.com/max/395/1*mIjIjWIUc45MQjLDVkOC-w.png")
             }
         }.addOnSuccessListener { (shortLink, flowchartLink) ->
             // Short link created
-            Toast.makeText(this@createRoomActivity, "Entro wuuuu :D", Toast.LENGTH_SHORT).show()
             val sendIntent = Intent()
             sendIntent.action = Intent.ACTION_SEND
             sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
@@ -67,8 +68,9 @@ class createRoomActivity : AppCompatActivity() {
             startActivity(shareIntent)
         }.addOnFailureListener {
             // Error
-            Toast.makeText(this@createRoomActivity, "valio verga", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@createRoomActivity, "Error al generar el enlace", Toast.LENGTH_SHORT).show()
 
         }
-    }
+     }
+
 }
