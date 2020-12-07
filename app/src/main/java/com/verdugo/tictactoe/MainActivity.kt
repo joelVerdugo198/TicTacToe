@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity() {
                             val code = deepLink.getQueryParameter("code")
                             if (code != null) {
                                 editTextCode.setText(code)
-
+                                buttonCreateRoom.setVisibility(View.GONE)
                             }
                         }
                     }
